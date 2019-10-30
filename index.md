@@ -1,6 +1,6 @@
 # IE 423 Progress Journal
 
-We are the Group 4. Our group members are:
+We are the Group 4. Our group members are:   
 1.Sinan Demirhan  
 2.Abdullah Yıldız  
 3.Oğulcan Ece   
