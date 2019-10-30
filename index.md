@@ -9,4 +9,4 @@ We are the Group 4. Our group members are:
 
 
 ## Project Part 1
-[Here](files/PART-1.html) is our Project Part 1.
+[Here](HW1/PART-1.html) is our Project Part 1.
