@@ -1,0 +1,217 @@
+---
+title: "PROJECT PART 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##PROJECT PART 2
+
+Before working on the tasks, please transform your color image to a greyscale one using an image editor. The other option is to use some package/module to perform the transformation. You will be working on greyscale images for the following tasks:
+```{r}
+require(stats)
+library("imager")
+library(ggplot2)
+library(dplyr)
+library("EBImage")
+im <- load.image('surfacenew.jpg')
+plot(im)
+
+img_g<-grayscale(im)
+plot(img_g)
+
+```
+
+
+###Question 1-)
+Suppose we are interested in the pixel value distribution of our image. Draw the histogram of the pixel values. Provide an appropriate probability distribution that fits well to the shape you observe 
+```{r}
+pixel_for_dim<- as.data.frame(img_g)
+pixels<-pixel_for_dim[,3]
+hist(pixels) #Normal Distribution
+
+```
+
+We can see that pixel values are distributed with normal distribution.
+
+###Question 2-)
+Assume that pixel values are following the distribution you have proposed in the previous task.
+Estimate the parameters using the data.
+
+```{r}
+#mean median variance and mode values
+mean(pixels)  #0.5687696
+```
+
+```{r}
+median(pixels)
+```
+
+```{r}
+var(pixels)
+```
+
+```{r}
+sqrt(var(pixels))
+```
+
+```{r}
+getmode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+getmode(pixels)
+```
+
+###Question 3-)
+Let's say the pixel values follow the distribution you proposed and its parameters are equal to what you have estimated in part 2. Identify the pixels that are out of the 0.001 probability limits. In other words, find a lower and upper bound that leave 0.001 of the observations on the smaller and large side of the distribution respectively. Pixels that are out of these bounds should be identified. After finding those pixels, change the value of these pixels to zero (i.e. black color). Display the new image and original image in a plot. What are your observations? Comment on your findings.
+
+```{r}
+sum1<-0
+sum2<-0
+#262144*0.001 =263
+
+quantile(pixels, 0.001) #0.2873333
+quantile(pixels, 0.999) #0.8824314
+```
+To see the pixel values which are leave 0.001 point in their right and 0.001 points in their left,we used the quantile function.
+
+By using for loops,We can see how many pixels those are out of the lower and upper bounds
+```{r}
+new_pixels<-pixel_for_dim
+for (i in c(1:262144)){
+  if (new_pixels[,3][i]<=0.2873333){
+    sum1<-sum1+1
+  }
+} 
+sum1 #262
+```
+
+There are 262 pixels in the left side.
+```{r}
+for (i in c(1:262144)){
+  if (new_pixels[,3][i]>=0.8824314){
+    sum2<-sum2+1
+  }
+}
+sum2 #258
+```
+
+There are 258 pixels in the left side.
+
+Pixels that are out of these bounds are identified and after
+finding those pixels,we changed the value of these pixels to zero.
+```{r}
+for (i in c(1:262144)){
+  if (new_pixels[,3][i]>=0.8824314){
+    new_pixels[,3][i]=0
+  }
+  else if (new_pixels[,3][i]<=0.2873333){
+    new_pixels[,3][i]=0
+  }
+}
+```
+Display the new image and original image in a plot.
+
+```{r}
+#total
+blacked_pixels<-new_pixels[,3] %>% as.cimg(dim=dim(img_g))
+
+par(mfrow = c(1,2))
+plot(1:2, type='n')
+rasterImage(img_g, 1, 1, 2, 2)
+plot(1:2, type='n')
+rasterImage(blacked_pixels, 1, 1, 2, 2)
+```
+
+As we know  the distribution is normal , we identified the points that are out of the 0.001 probability limits are 0.8824 and 0.287.
+The points' pixel values which will bigger than 0.8824 and smaller than 0.287 are decided to be changed with zero. Thus , 510 pixels will be black  with this changing values operation. Although there is a 512×512 matrix and this matrix has big number of pixels , the change in pixels affect the image clearly.
+On the other hand , changing pixels which out of the probability of 0 .001 makes our image more clearly , even the number of black pixels increasing.
+
+
+###Question 4-)
+Suppose we would like to perform the same operation on the patches of images (i.e. windows of
+certain size). When local structures are important, performing image operations on the patches might be important. Assume that your window size is 51x51 and you repeated what you have done in the first three tasks. Note that you do not need to draw each patch as requested in the previous task (i.e. task 3) but you are expected to mark the pixels for every patch. After finding those pixels, change the value of these pixels to zero (i.e. black color). Display the new image and original image in a plot. What are your observations? Comment on your findings
+
+```{r}
+new_windows<-img_g
+hist_data_of_windows<-array(0,dim = c(10,10,2601))
+mean_of_windows<-array(0,dim = c(10,10))
+variance_of_windows<-array(0,dim = c(10,10))
+sum_of_blacked<-0
+```
+
+By using for loop,We found those pixels which are out of the lower and the upper bounds and changed the value of those pixels to zero
+```{r}
+
+for (k in c(1:10)){
+  for(l in c(1:10)){
+    kleft<-(1+(51*k)-51)
+    kright<-(51*k)
+    lleft<-(1+(51*l)-51)
+    lright<-(51*l)
+    image_new<-new_windows[kleft:kright,lleft:lright]
+    low<-quantile(image_new, 0.001)
+    high<-quantile(image_new, 0.999)
+    
+    for(i in c(1:2601)){
+      if(image_new[i]<= low){
+        image_new[i]=0
+        sum_of_blacked=sum_of_blacked+1
+      }
+      else if(image_new[i]>=high){
+        image_new[i]=0
+        sum_of_blacked=sum_of_blacked+1
+      }
+      
+    }
+    mean_of_windows[k,l]=mean(image_new)
+    variance_of_windows[k,l]=var(as.data.frame(as.cimg(image_new))[,3])
+    hist_data_of_windows[k,l,]=image_new
+    
+    new_windows[kleft:kright,lleft:lright]=image_new
+  }
+}
+
+```
+
+We can see the statical parameters for each patches.
+```{r}
+mean_of_windows
+```
+
+```{r}
+variance_of_windows
+```
+
+```{r}
+sum_of_blacked  #624
+```
+
+
+
+To see the histograms of each 100 patches.
+```{r}
+for(i in c(1:10)){
+  par(mfrow= c(2,5))
+  for (j in c(1:10)) {
+    hist(hist_data_of_windows[i,j,])
+  }
+  
+}
+```
+
+
+Displaying the new image and original image in a plot
+```{r}
+par(mfrow = c(1,2))
+plot(1:2, type='n')
+rasterImage(img_g, 1, 1, 2, 2)
+plot(1:2, type='n')
+rasterImage(new_windows, 1, 1, 2, 2)
+```
+
+We made the same thing as in the 3rd question with a little difference. Now,the pixels that are out of the upper and lower bounds in each patch were converted to black pixels. However, compared to 3rd question, the distribution of the new pure black dots are completely different now.They are distributed almost in every patch because of the reason that we investigated them patch by patch.By investigating all patches in among themselves force them to have some pixels which are out of boundary, so we can say that in the fourth question the pixels are distiributed much more coequally.Also we can see the black pixels much more easily because of the reason that there are much more than in the 3rd question and they are distiributed much more systematically than in the 3rd question.
+
