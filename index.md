@@ -9,6 +9,6 @@ We are the Group 4. Our group members are:
 
 
 ## Project Part 1
-[Here](files/example.html) is our Project Part 1.
+[Here](file:///C:/Users/Sinan/Desktop/IE-423-PROJECT-1.html) is our Project Part 1.
 
 [Here](files/example.html) is our Project Part 1.
