@@ -6,6 +6,7 @@ We are the Group 4. Our group members are:
 3.Oğulcan Ece   
 4.Merve Keskin  
 5.Merve Gülsüm Kıratlı
+6.Oğuzhan Murat Tosun
 
 
 ## Project Part 1
