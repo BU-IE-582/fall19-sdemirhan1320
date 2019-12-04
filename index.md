@@ -12,4 +12,10 @@ We are the Group 4. Our group members are:
 [Here](HW1/PART-1.html) is our Project Part 1.
 
 
-[Here](HW1/PART-2.html) is our Project Part 2
+[Here](HW1/PART-2.html) is our Project Part 2   
+
+## Project Part 1     
+[Here](HW2/PART-1.html) is our Project Part 1.
+
+
+[Here](HW2/PART-2.html) is our Project Part 2   
