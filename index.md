@@ -22,6 +22,8 @@ We are the Group 4. Our group members are:
 [Here](HW2/PROJECT-PART-2.html) is our Project Part 2  
 
 ## Project Part 3     
+[Here](HW3/Project-3.html) is our Report part for Project 3.
+
 [Here](HW3/Project-3.html) is our Project 3 for images from 1 to 10.
     
     
