@@ -25,4 +25,4 @@ We are the Group 4. Our group members are:
 [Here](HW3/423-Part-1.html) is our Project 3 for images from 1 to 10.
     
     
-[Here](HW3/PROJECT-PART-2.html) is our Project 3 for images from 11 to 20.  
+[Here](HW3/Project-3-Continued.html) is our Project 3 for images from 11 to 20.  
